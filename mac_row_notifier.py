@@ -15,9 +15,9 @@ from datetime import datetime
 from pathlib import Path
 
 # ─── CONFIG ───────────────────────────────────────────────────────────────────
-OBS_FOLDER = Path("/Users/rohaanafzal/Movies")
+OBS_FOLDER = Path("/Users/Mac/Movies")
 #Rs2 IP 
-JETSON_IP = "192.168.42.107"
+JETSON_IP = "192.169.43.107"
 JETSON_PORT = 7000
 CHECK_INTERVAL = 2  # seconds
 # ──────────────────────────────────────────────────────────────────────────────
