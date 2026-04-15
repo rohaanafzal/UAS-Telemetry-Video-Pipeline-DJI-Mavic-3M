@@ -29,7 +29,7 @@ Designed for precision agriculture, infrastructure inspection, and research-grad
                                              │ WiFi (RS2 Hotspot)
                               ┌──────────────▼──────────────┐
                               │       LOCAL NETWORK         │
-                              │   192.168.42.0/24           │
+                              │   10.42.0.0/24           │
                               │   (Emlid RS2+ Hotspot)      │
                               └──────┬───────────┬──────────┘
                                      │           │
@@ -38,7 +38,7 @@ Designed for precision agriculture, infrastructure inspection, and research-grad
                           │ .238        │   │   .107        │
                           │ MediaMTX    │   │  UDP Receiver │
                           │ OBS Studio  │   │  Event Logger │
-                          │ Row Notifier│   │  ~/Rohaan-    │
+                          │ Row Notifier│   │  ~/Mac-    │
                           └─────────────┘   │  Testing-     │
                                             │  Signal/      │
                                             └───────────────┘
@@ -52,7 +52,7 @@ Designed for precision agriculture, infrastructure inspection, and research-grad
 ```
 Mavic 3M Camera
     └── RC Pro (DJI Pilot 2 → Live Stream → Custom RTMP)
-            └── rtmp://192.168.42.238:1935/live
+            └── rtmp://10.42.0.105:1935/live
                     └── MediaMTX (RTMP ingest server)
                             └── OBS Studio (monitor + record)
                                     └── /Users/<user>/Movies/*.mov
@@ -75,7 +75,7 @@ OBS stops recording
             └── mac_row_notifier.py (inotify-style polling, 2s interval)
                     └── UDP → Jetson :7000
                             └── jetson_receiver.py
-                                    └── ~/Rohaan-Testing-Signal/log_YYYYMMDD.txt
+                                    └── ~/mac-Testing-Signal/log_YYYYMMDD.txt
 ```
 
 ---
@@ -97,10 +97,10 @@ OBS stops recording
 
 | Device | IP Address | Subnet |
 |---|---|---|
-| Mac (Ground Station) | `192.168.42.238` | RS2 Hotspot |
-| Jetson (Edge Compute) | `192.168.42.107` | RS2 Hotspot |
-| RC Pro (Controller) | `192.168.42.x` | RS2 Hotspot |
-| Emlid RS2+ | `192.168.42.1` | Gateway / Hotspot AP |
+| Mac (Ground Station) | `10.42.0.105` | RS2 Hotspot |
+| Jetson (Edge Compute) | `10.42.0.211` | RS2 Hotspot |
+| RC Pro (Controller) | `10.42.0.x` | RS2 Hotspot |
+| Emlid RS2+ | `10.42.0.1` | Gateway / Hotspot AP |
 
 ### Ports
 
@@ -149,7 +149,7 @@ python3 mac_row_notifier.py
 ```
 
 **OBS Configuration:**
-- Sources → Media Source → `rtmp://192.168.42.238:1935/live`
+- Sources → Media Source → `rtmp://10.42.0.105:1935/live`
 - Output → Recording Path → `/Users/<user>/Movies`
 - Format: `.mov` or `.mp4`
 
@@ -159,7 +159,7 @@ python3 mac_row_notifier.py
 
 **Transfer receiver script:**
 ```bash
-scp jetson_receiver.py bsen@192.168.42.107:~/
+scp jetson_receiver.py bsen@10.42.0.211:~/
 ```
 
 **Start receiver:**
@@ -169,7 +169,7 @@ python3 ~/jetson_receiver.py
 
 Logs are saved to:
 ```
-~/Rohaan-Testing-Signal/log_YYYYMMDD.txt
+~/mac-Testing-Signal/log_YYYYMMDD.txt
 ```
 
 ---
@@ -189,14 +189,14 @@ AIRCRAFT_API_KEY = <your_dji_api_key>
 
 **Set target IPs** in `TelemetrySender.kt`:
 ```kotlin
-private const val MAC_IP = "192.168.42.238"
+private const val MAC_IP = "10.42.0.105"
 private const val UDP_PORT = 5005
 ```
 
 **DJI Pilot 2 RTMP config:**
 ```
 Settings → Live Stream → Custom RTMP
-URL: rtmp://192.168.42.238:1935/live
+URL: rtmp://10.42.0.105:1935/live
 Resolution: 720P / 30FPS
 ```
 
@@ -206,19 +206,19 @@ Resolution: 720P / 30FPS
 
 ```
 # TelemetrySender.kt
-MAC_IP      = 192.168.42.238
+MAC_IP      = 10.42.0.105
 UDP_PORT    = 5005
 POLL_RATE   = 1000ms (1 Hz)
 
 # mac_row_notifier.py
 OBS_FOLDER      = /Users/<user>/Movies
-JETSON_IP       = 192.168.42.107
+JETSON_IP       = 10.42.0.211
 JETSON_PORT     = 7000
 CHECK_INTERVAL  = 2s
 
 # jetson_receiver.py
 LISTEN_PORT = 7000
-SAVE_FOLDER = ~/Rohaan-Testing-Signal/
+SAVE_FOLDER = ~/mac-Testing-Signal/
 ```
 
 ---
@@ -229,7 +229,7 @@ SAVE_FOLDER = ~/Rohaan-Testing-Signal/
 |---|---|---|
 | Waypoint mission crashes on launch | SDK callback blocking mission thread | Move `TelemetrySender.start()` to background coroutine; remove `startLiveStream()` |
 | RTMP stream not received by OBS | Wrong IP in Pilot 2 or MediaMTX path unconfigured | Set URL to `rtmp://<mac_ip>:1935/live`; verify `paths.live` in `mediamtx.yml` |
-| UDP packets sent but Jetson not receiving | Devices on different subnets | Confirm both devices on same AP (`192.168.42.x`); check with `ping` |
+| UDP packets sent but Jetson not receiving | Devices on different subnets | Confirm both devices on same AP (`10.42.0.x`); check with `ping` |
 | GPS reads `0.0, 0.0` | Drone not connected or SDK not registered | Verify API key matches package name in DJI developer portal |
 | Row notifier fires on existing files | Script launched after recordings already exist | Expected — script snapshots existing files on start, only alerts on new ones |
 | `jetson_receiver.py` log file empty | File handle buffering | Fixed — script opens/closes file per message (no buffering) |
@@ -286,4 +286,4 @@ MIT License. See `LICENSE` for details.
 
 ---
 
-*Built for the Smart Horticultural Systems Lab — Auburn University Biosystems Engineering*
+*Built for the Smart Horticultural Systems Lab — Biosystems Engineering*
