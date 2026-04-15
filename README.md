@@ -1,6 +1,8 @@
 # 🛩️ UAS Telemetry & Video Pipeline
 
 <div align="center">
+  <img src="cover.png" alt="UAS Pipeline Architecture" width="900"/>
+
 
 ![Platform](https://img.shields.io/badge/Platform-DJI%20Mavic%203M-blue?style=flat-square)
 ![SDK](https://img.shields.io/badge/DJI%20Mobile%20SDK-v5-orange?style=flat-square)
