@@ -12,7 +12,7 @@
 
 **Real-time GNSS telemetry extraction, RTMP video streaming, and autonomous mission event signaling for precision UAV operations.**
 
-*Smart Horticultural Systems Lab — Biosystems Engineering*
+*Smart Horticultural Systems Engineering — Biosystems Engineering*
 
 </div>
 
