@@ -381,6 +381,6 @@ MIT License. See [`LICENSE`](LICENSE) for details.
 
 <div align="center">
 
-*Smart Horticultural Systems Lab — Biosystems Engineering*
+*Smart Horticultural Systems Engineering — Biosystems Engineering*
 
 </div>
